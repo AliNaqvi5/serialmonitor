@@ -20,7 +20,7 @@ parser.on('data', (data) => {
 
     console.log("inside parser : ",data);
     // Check if the received data contains a complete message (e.g., terminated by a newline)
-    if (receivedData.includes('\n')) {
+    if (receivedData.includes('end::')) {
         // Extract the complete message and process it (here, we're logging it)
         const completeMessage = receivedData.split('\n')[0];
 
@@ -46,3 +46,29 @@ process.on('SIGINT', () => {
         }
     });
 });
+
+
+const request = require('http');
+const qs = require('querystring');
+http.createServer((req, res ) => {
+    if(req.method == 'GET'){
+        //serve file
+    }else if( req.method =="POST")
+    {
+        var body ="";
+        req.on('data', (data) =>{
+            body +=data;
+        });
+
+        req.on('end',()=>{
+            var postData = qs.parse(body);
+            console.log(postData.username);
+            res.end();
+        });
+        req.on('err', (err) =>{
+          console.log(err);
+        });
+
+    }
+
+})
