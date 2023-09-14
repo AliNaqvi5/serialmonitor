@@ -1,7 +1,7 @@
 const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
 const axios = require('axios');
-const port = new SerialPort({ path: 'COM3', baudRate: 9600 })
+const port = new SerialPort({ path: 'COM4', baudRate: 9600 })
 
 let LoggedIn = false;
 let receivedData = '';
@@ -36,7 +36,7 @@ parser.on('data', (data) => {
 // 3|5KXPkp3z4AHPn1rQ7vxIDhpJhEREfa4ohh9djgeX
 
 let headers = {
-    'Authorization': 'Bearer 3|5KXPkp3z4AHPn1rQ7vxIDhpJhEREfa4ohh9djgeX',
+    'Authorization': 'Bearer 1|G0QgCo6oLKceUdkl5KzwVtXo2q63hwm2RGFREp6qeb4990a8',
     'Content-Type': 'application/json',
 };
 const apiUrl = 'http://127.0.0.1:8000/api/login';
@@ -59,7 +59,7 @@ axios.post(apiUrl, dataToSend, { headers })
 
 async function sendDataApi(dataToS) {
     try {
-        const response = await axios.post("http://127.0.0.1:8000/api/store", dataToS, { headers });
+        const response = await axios.post("http://127.0.0.1:8000/api/data-store", dataToS, { headers });
         console.log('Response:', response.data);
     } catch (error) {
         console.error('Error:', error);
@@ -68,7 +68,7 @@ async function sendDataApi(dataToS) {
 
 async function sendDataApiAlarms(dataToS) {
     try {
-        const response = await axios.post("http://127.0.0.1:8000/api/alarmstore", dataToS, { headers });
+        const response = await axios.post("http://127.0.0.1:8000/api/alarm-store", dataToS, { headers });
         console.log('Response:', response.data);
     } catch (error) {
         console.error('Error:', error);
