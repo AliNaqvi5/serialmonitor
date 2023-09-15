@@ -47,9 +47,10 @@ const dataToSend = {
 axios.post(apiUrl, dataToSend, { headers })
     .then((response) => {
         console.log('Response:', response.data);
-        if(((response.data).toString()).includes("successfully.")) {
+        if(((response.data.message).toString()).includes("successfully.")) {
             headers.Authorization ='Bearer '+response.data.data.token;
             LoggedIn = true;
+            checkControls();
         }
     })
     .catch((error) => {
@@ -74,5 +75,29 @@ async function sendDataApiAlarms(dataToS) {
         console.error('Error:', error);
     }
 }
+
+async function checkControls()
+{
+    console.log("this",headers );
+    try {
+        await axios.post("http://127.0.0.1:8000/api/control-waterPump",[], { headers }).then(function (response) {
+            console.log('Response:', response.data); });
+        sendDatatoArdiono(response.data.data.nameControl+":"+response.data.data.value);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+function sendDatatoArdiono(data)
+{
+    port.write(data, function(err) {
+        if (err) {
+            return console.log('Error on write: ', err.message)
+        }
+        console.log('message written')
+    })
+
+}
+
 
 // sendDataApi();
